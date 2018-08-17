@@ -1,6 +1,6 @@
 {
   "name": "@justeat/gulp-gh-pages",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Gulp v3 plugin to publish contents to Github pages",
   "repository": "justeat/gulp-gh-pages",
   "license": "MIT",
