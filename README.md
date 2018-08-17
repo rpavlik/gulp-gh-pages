@@ -7,6 +7,8 @@
 
 [gulp](http://gulpjs.com/) plugin to publish contents to [Github pages](https://pages.github.com/)
 
+---
+
 ## Installation
 
 [Use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/getting-started/what-is-npm).
@@ -40,54 +42,54 @@ const ghPages = require('gulp-gh-pages');
 
 ### ghPages([*options*])
 
-*options*: `Object`  
+*options*: `Object`
 Return: [`stream.Transform`](https://nodejs.org/api/stream.html#stream_class_stream_transform)
 
 #### options.remoteUrl
 
-Type: `string`  
+Type: `string`
 Default: URL for the remote of the current dir (assumes a git repository)
 
 By default `gulp-gh-pages` assumes the current working directory is a git repository and uses its remote url. If your `gulpfile.js` is not in a git repository, or if you want to push to a different remote url, you can specify it. Ensure you have write access to the repository.
 
 #### options.origin
 
-Type: `string`  
+Type: `string`
 Default: `"origin"`
 
 Git remote.
 
 #### options.branch
 
-Type: `string`  
+Type: `string`
 Default: `"gh-pages"`
 
 The branch where deploy will by done. Change to "master" for `username.github.io` projects.
 
 #### options.cacheDir
 
-Type: `string`  
+Type: `string`
 Default: `.publish`
 
 Set the directory path to keep a cache of the repository. If it doesn't exist, gulp-gh-pages automatically create it.
 
 #### options.push
 
-Type: `boolean`  
+Type: `boolean`
 Default: `true`
 
 Allow you to make a build on the defined branch without pushing it to master. Useful for dry  run.
 
 #### options.force
 
-Type: `boolean`  
+Type: `boolean`
 Default: `false`
 
 Force adding files to the `gh-pages` branch, even if they are ignored by `.gitignore` or `.gitignore_global`.
 
 #### options.message
 
-Type: `String`  
+Type: `String`
 Default: `"Update [timestamp]"`
 
 Edit commit message.
