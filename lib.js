@@ -7,11 +7,11 @@ const rimrafCallback = require('rimraf');
 
 const rimraf = promisify(rimrafCallback);
 
-async function listLocalBranches(repo) {
+async function listLocalBranches (repo) {
     return (await promisify(repo.branches.bind(repo))()).map(({ name }) => name);
 }
 
-async function listRemoteBranches(repo) {
+async function listRemoteBranches (repo) {
     const branches = (await promisify(repo.git.bind(repo))('branch', { r: true })).split('\n');
     branches.shift();
     branches.pop();
@@ -19,12 +19,12 @@ async function listRemoteBranches(repo) {
     return branches.map(branchName => branchName.trim());
 }
 
-async function getCommits(repo, branchName) {
+async function getCommits (repo, branchName) {
     return (await promisify(repo.commits.bind(repo))(branchName)).map(({ id, message, committedDate }) => ({ id, message, committedDate }));
 }
 
 class Git {
-    constructor(repo, initialBranch) {
+    constructor (repo, initialBranch) {
         this._repo = repo;
         this._staged = [];
         this._localBranches = [];
@@ -37,7 +37,7 @@ class Git {
     * Status
     * files - Array of String paths; or a String path.
     **/
-    async status() {
+    async status () {
         const repo = await promisify(this._repo.status.bind(this._repo))();
         this._repo = repo.repo;
         this._staged = repo.files;
@@ -50,30 +50,30 @@ class Git {
         return this;
     }
 
-    async checkoutBranch(name) {
+    async checkoutBranch (name) {
         await promisify(this._repo.checkout.bind(this._repo))(name);
         this._currentBranch = name;
 
         return this.status();
     }
 
-    async createBranch(name) {
+    async createBranch (name) {
         await promisify(this._repo.create_branch.bind(this._repo))(name);
         this._currentBranch = name;
 
         return this.status();
     }
 
-    async createAndCheckoutBranch(name) {
+    async createAndCheckoutBranch (name) {
         return (await this.createBranch(name)).checkoutBranch(name);
     }
 
-    async addFiles(files, options) {
+    async addFiles (files, options) {
         await promisify(this._repo.add.bind(this._repo))(files, options);
         return this.status();
     }
 
-    async commit(commitMsg) {
+    async commit (commitMsg) {
         await promisify(this._repo.commit.bind(this._repo))(commitMsg, { all: true });
         return this.status();
     }
@@ -82,27 +82,25 @@ class Git {
 /*
  * Gets the URL for the specified remote of a repo
  */
-async function getRemoteUrl(repo, remote) {
-    return (await promisify(repo.config.bind(repo))()).items[`remote.${remote}.url`];
+async function getRemoteOriginUrl (repo) {
+    return (await promisify(repo.config.bind(repo))()).items['remote.origin.url'];
 }
 
 /*
  * Clone repo
  * Returns repo object
 **/
-async function prepareRepo(remoteUrl, dir) {
+async function prepareRepo (remoteUrl, dir) {
     // assume that if there is a .git folder get its remoteUrl
     // and check if it mathces the one we want to use.
-    if (!remoteUrl) {
-        remoteUrl = await getRemoteOriginUrl(git(process.cwd()));
-    }
+    remoteUrl = remoteUrl || await getRemoteOriginUrl(git(process.cwd())); // eslint-disable-line no-param-reassign
 
-    async function initRepo(repo) {
+    async function initRepo (repo) {
         const head = await promisify(repo.branch.bind(repo))();
         return new Git(repo, head.name).status();
     }
 
-    async function clearAndInitRepo() {
+    async function clearAndInitRepo () {
         await rimraf(dir);
         return initRepo(await promisify(git.clone.bind(git))(remoteUrl, dir));
     }
@@ -115,12 +113,11 @@ async function prepareRepo(remoteUrl, dir) {
         }
 
         return clearAndInitRepo();
-    } catch {
+    } catch (err) {
         return clearAndInitRepo();
     }
 }
 
 Git.prepareRepo = prepareRepo;
-Git.getRemoteUrl = getRemoteUrl;
 
 module.exports = Git;
