@@ -17,13 +17,13 @@ async function listRemoteBranches (repo) {
     branches.pop();
 
     return branches.map(branchName => {
-        branchName = branchName.trim();
+        branchName = branchName.trim(); // eslint-disable-line no-param-reassign
         return branchName;
     });
 }
 
 async function getCommits (repo, branchName) {
-    return (await promisify(repo.commits.bind(repo))(branchName)).map(({ id, message, committed_date }) => ({ id, message, committed_date }));
+    return (await promisify(repo.commits.bind(repo))(branchName)).map(({ id, message, committedDate }) => ({ id, message, committedDate }));
 }
 
 class Git {
@@ -37,9 +37,9 @@ class Git {
     }
 
     /*
-	* Status
-	* files - Array of String paths; or a String path.
-	**/
+    * Status
+    * files - Array of String paths; or a String path.
+    **/
     async status () {
         const repo = await promisify(this._repo.status.bind(this._repo))();
         this._repo = repo.repo;

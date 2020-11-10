@@ -1,11 +1,12 @@
 
 
 const { promisify } = require('util');
-const { finished, Transform } = require('stream');
+const { Transform } = require('stream');
 
 const fancyLog = require('fancy-log');
 const PluginError = require('plugin-error');
 const vinylFs = require('vinyl-fs');
+const finished = require('finished');
 const git = require('./lib.js');
 
 /*

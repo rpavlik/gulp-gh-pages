@@ -4,6 +4,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+v1.0.2
+------------------------------
+*August 17, 2018*
+
+### Fixed
+- Fixes issue with stream finish only being supported on Node 10
+
+
 v1.0.1
 ------------------------------
 *August 17, 2018*
