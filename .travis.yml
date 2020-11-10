@@ -1,17 +1,11 @@
+branches:
+  except: /^v\d/
 language: node_js
-
-node_js:
-  - "8"
-  - "6"
-
-cache: yarn
-
+node_js: node
 before_script:
-  - yarn run lint
-
-script:
-  - yarn test:cover
-  - yarn danger ci
-
-after_success:
-  - yarn run test:cover:CI
+  - git config --global user.name "John Doe"
+  - git config --global user.email johndoe@example.org
+matrix:
+  include:
+  - dist: xenial
+    after_script: node_modules/.bin/nyc report | npx coveralls
